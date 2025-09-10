@@ -18,7 +18,7 @@ jobs:
 
     steps:
     - name: Test Docker Hub connectivity
-      run: ping -c 3 registry-1.docker.io
+      run: curl -I https://registry-1.docker.io/v2/
 
     - name: Checkout code
       uses: actions/checkout@v3
