@@ -1,0 +1,22 @@
+services:
+  web:
+    build: .
+    ports:
+      - "${APP_PORT}:5000"
+    environment:
+      - FLASK_ENV=${FLASK_ENV}
+      - FLASK_DEBUG=${FLASK_DEBUG}
+      - SECRET_KEY=${SECRET_KEY}
+    volumes:
+      - .:/app
+    restart: unless-stopped
+    depends_on:
+      - generate-secret
+
+  generate-secret:
+    image: python:3.9-slim
+    volumes:
+      - .:/app
+    working_dir: /app
+    entrypoint: bash
+    command: /app/generate_secret.sh
