@@ -1,23 +1,18 @@
 #!/bin/bash
 
-# Проверяем существование файла .env
-if [ ! -f ".env" ]; then
-  echo "Ошибка: файл .env не найден!"
-  exit 1
-fi
+# Создаем файл .env с базовыми настройками
+cat << EOF > .env
+FLASK_ENV=development
+FLASK_DEBUG=1
+APP_PORT=5010
+EOF
 
-# Создаем резервную копию
-cp .env .env.backup
+# Генерируем токен
+SECRET_KEY=$(python -c 'import secrets; print(secrets.token_urlsafe(16))')
 
-# Длина токена (по умолчанию 16)
-TOKEN_LENGTH=${1:-16}
+# Добавляем SECRET_KEY в файл .env
+echo "SECRET_KEY=$SECRET_KEY" >> .env
 
-# Генерируем новый секретный ключ
-SECRET_KEY=$(python -c "import secrets; print(secrets.token_urlsafe($TOKEN_LENGTH))")
-
-# Обновляем значение в файле .env
-sed -i "s/^SECRET_KEY=.*/SECRET_KEY=$SECRET_KEY/" .env
-
-echo "Старый файл сохранен как .env.backup"
-echo "Новый секретный ключ сгенерирован и сохранен в .env:"
-echo "SECRET_KEY=$SECRET_KEY"
+echo "Файл .env успешно создан:"
+cat .env
+echo "Секретный ключ: $SECRET_KEY"

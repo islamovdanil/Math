@@ -1,2 +1,4 @@
 Flask==2.3.2
 python-decouple==3.5
+gunicorn
+python-dotenv
