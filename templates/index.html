@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Тест на знание таблицы умножения</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Привет! Давай проверим твои знания таблицы умножения!</h1>
+
+        {% if message %}
+            <div class="message">{{ message }}</div>
+        {% endif %}
+
+        {% if new_game %}
+            <a href="{{ url_for('index') }}">Начать новую игру</a>
+        {% else %}
+            <p>Реши пример: {{ question }} × {{ second_number }} = ?</p>
+            <form method="post">
+                <input type="number" name="answer" required>
+                <button type="submit">Проверить</button>
+            </form>
+
+            <div class="attempts">
+                Осталось попыток: {{ attempts }}
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>

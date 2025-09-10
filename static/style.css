@@ -1,0 +1,61 @@
+body {
+ font-family: Arial, sans-serif;
+ background-color: #f5f5f5;
+ margin: 0;
+ padding: 0;
+}
+
+.container {
+ max-width: 600px;
+ margin: 50px auto;
+ padding: 20px;
+ background-color: #fff;
+ box-shadow: 0 0 10px rgba(0,0,0,0.1);
+ position: relative; /* Добавляем позиционирование */
+}
+
+.message {
+ margin: 20px 0;
+ padding: 10px;
+ background: #eef;
+ border-left: 4px solid #2ecc71;
+}
+
+.attempts {
+ margin-top: 20px;
+ font-size: 1.2em;
+ color: #333;
+}
+
+form {
+ display: flex;
+ flex-direction: column;
+ gap: 15px;
+ width: 100%; /* Задаем ширину 100% */
+}
+
+input[type="number"] {
+ padding: 15px;
+ font-size: 1.5em;
+ border: 1px solid #ccc;
+ border-radius: 5px;
+ width: 80%; /* Уменьшаем ширину до 80% */
+ max-width: 300px; /* Добавляем максимальную ширину */
+}
+
+button {
+ padding: 15px;
+ font-size: 1.2em;
+ background-color: #2ecc71;
+ color: white;
+ border: none;
+ border-radius: 5px;
+ cursor: pointer;
+ transition: background-color 0.3s;
+ width: 80%; /* Уменьшаем ширину до 80% */
+ max-width: 300px; /* Добавляем максимальную ширину */
+}
+
+button:hover {
+ background-color: #27ae60;
+}
