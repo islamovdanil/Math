@@ -17,6 +17,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Test Docker Hub connectivity
+      run: ping -c 3 registry-1.docker.io
+
     - name: Checkout code
       uses: actions/checkout@v3
 
