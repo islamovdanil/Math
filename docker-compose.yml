@@ -12,6 +12,8 @@ services:
     restart: unless-stopped
     depends_on:
       - generate-secret
+    expose:
+      - "5000"
 
   web2:
     build: .
@@ -26,6 +28,8 @@ services:
     restart: unless-stopped
     depends_on:
       - generate-secret
+    expose:
+      - "5000"
 
   generate-secret:
     image: python:3.9-slim
@@ -39,8 +43,38 @@ services:
     image: nginx:latest
     ports:
       - "80:80"
+      - "9113:9113"
     volumes:
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
     depends_on:
       - web1
       - web2
+    expose:
+      - "9113"
+
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus:/etc/prometheus
+    depends_on:
+      - web1
+      - web2
+      - nginx
+
+  node-exporter:
+    image: prom/node-exporter:latest
+    ports:
+      - "9100:9100"
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+
+  nginx-prometheus:
+    image: nginx:1.21-alpine
+    volumes:
+      - ./nginx/nginx-prometheus.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - nginx
