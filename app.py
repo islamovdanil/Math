@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, session, redirect, url_for
 import random
 from decouple import config
+import os
 
 app = Flask(__name__)
 app.secret_key = config('SECRET_KEY')
@@ -72,4 +73,6 @@ def index():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    host = os.getenv('FLASK_HOST', '0.0.0.0')
+    port = os.getenv('FLASK_PORT', 5010)
+    app.run(host=host, port=port)
