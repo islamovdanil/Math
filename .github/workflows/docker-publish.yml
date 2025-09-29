@@ -6,25 +6,35 @@ on:
       - main
 
 jobs:
-  build:
+  build_amd64:
     runs-on: ubuntu-latest
-    services:
-      docker:
-        image: docker:latest
-        options: --privileged
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Debug Secrets and Variables
+        run: |
+          echo "Checking secrets:"
+          if [ -z "${{ secrets.DOCKER_HUB_USERNAME }}" ]; then
+            echo "❌ DOCKER_HUB_USERNAME is NOT set"
+          else
+            echo "✅ DOCKER_HUB_USERNAME is available (length: ${#SECRET_USER})"
+          fi
+
+          if [ -z "${{ secrets.DOCKER_HUB_PASSWORD }}" ]; then
+            echo "❌ DOCKER_HUB_PASSWORD is NOT set"
+          else
+            echo "✅ DOCKER_HUB_PASSWORD is available (length: ${#SECRET_PASS})"
+          fi
+
+          echo ""
+          echo "Environment:"
+          echo "GitHub SHA: ${{ github.sha }}"
+          echo "Runner OS: $(uname -a)"
+          echo "Docker version: $(docker --version)"
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
-
-      - name: Set up QEMU emulation
-        uses: docker/setup-qemu-action@v2
-        with:
-          image: tonistiigi/binfmt:latest
-          platforms: all
 
       - name: Login to Docker Hub
         uses: docker/login-action@v2
@@ -33,8 +43,11 @@ jobs:
           password: ${{ secrets.DOCKER_HUB_PASSWORD }}
 
       - name: Build and push Docker image
-        run: |
-          docker build -t dfislamov/math-web:latest .
-          docker push dfislamov/math-web:latest
-          docker build --platform linux/amd64 -t dfislamov/math-web:latest_arm64 .
-          docker push dfislamov/math-web:latest_arm64
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          push: true
+          tags: |
+            dfislamov/math-web:latest
+            dfislamov/math-web:${{ github.sha }}
+          file: ./Dockerfile
