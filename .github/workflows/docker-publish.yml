@@ -36,3 +36,5 @@ jobs:
         run: |
           docker build -t dfislamov/math-web:latest .
           docker push dfislamov/math-web:latest
+          docker build --platform linux/amd64 -t dfislamov/math-web:latest_arm64 .
+          docker push dfislamov/math-web:latest_arm64
